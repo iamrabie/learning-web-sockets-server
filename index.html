@@ -19,12 +19,37 @@
   <body>
     <ul id="messages"></ul>
     <form id="form" action="">
-      <input id="input" autocomplete="off" /><button>Send</button>
+      <input id="input" autocomplete="off" />
+      <button onclick="handleClick(event)">Send</button>
     </form>
 
     <script src="/socket.io/socket.io.js"></script>
     <script>
       const socket = io();
+
+      const form = document.getElementById('form');
+      const input = document.getElementById('input');
+
+      socket.on('hi'  , (socket) => {
+         console.log("a new user joinedd");
+      })
+
+      function handleClick (event) {
+        event.preventDefault();
+        // console.log("e target value :::::::::" , input.value);
+
+        //input.value just give T or F, if "" or no value then F else T
+        if (input.value) {
+          // console.log("input value :::::" , input.value);
+          //emit means send from where i am
+          socket.emit('chat message' , input.value);
+          input.value = ' ';
+        } 
+        // else {
+        //   console.log("nooo");
+        // }
+      }
+
     </script>
   </body>
 </html>

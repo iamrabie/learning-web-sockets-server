@@ -28,14 +28,13 @@ io.on('connection' , (socket) => {
     socket.on('chat message' , (message) => {
         // console.log('MESSAGE' , message);
         // socket.emit('hi');
-        socket.broadcast.emit('chat message' , message);
+        // socket.broadcast.emit('chat message' , message);
+        io.emit('chat message' , message);
     });
-
-
 });
 
 
-
+//THREE EMIT FUNCTIONS LEARNED SO FAR
 //socket.emit() --> emit means send from where i am, if used on client side, it sends the message to the server and if used on the server; it sends message to the client side.
 //io.emit() --> sends message to all the clients.
 //socket.broadcast.emit() --> sends message to all the clients except the sender.

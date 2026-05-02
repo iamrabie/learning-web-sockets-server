@@ -29,10 +29,20 @@
 
       const form = document.getElementById('form');
       const input = document.getElementById('input');
+      const messages = document.getElementById('messages');
 
-      socket.on('hi'  , (socket) => {
-         console.log("a new user joinedd");
-      })
+
+      // socket.on('hi'  , (socket) => {
+      //    console.log("a new user joinedd");
+      // });
+
+
+      socket.on('chat message', (msg) => {
+        const item = document.createElement('li');
+        item.textContent = msg;
+        messages.appendChild(item);
+        window.scrollTo(0, document.body.scrollHeight);
+      });
 
       function handleClick (event) {
         event.preventDefault();
@@ -43,7 +53,7 @@
           // console.log("input value :::::" , input.value);
           //emit means send from where i am
           socket.emit('chat message' , input.value);
-          input.value = ' ';
+          input.value = '';
         } 
         // else {
         //   console.log("nooo");

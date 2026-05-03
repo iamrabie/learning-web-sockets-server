@@ -22,7 +22,6 @@ io.on('connection' , (socket) => {
     console.log('a user connected');
 
     //   socket.broadcast.emit('hi');
-
     //   socket.emit('hi');
 
     socket.on('chat message' , (message) => {
@@ -31,6 +30,13 @@ io.on('connection' , (socket) => {
         // socket.broadcast.emit('chat message' , message);
         io.emit('chat message' , message);
     });
+
+    socket.on('acknowledgement' , (data , callback) => {
+        console.log("DATA RECIEVED :::" , data);
+        callback( null , {
+            status:'ok'
+        });
+    })
 });
 
 
@@ -38,6 +44,8 @@ io.on('connection' , (socket) => {
 //socket.emit() --> emit means send from where i am, if used on client side, it sends the message to the server and if used on the server; it sends message to the client side.
 //io.emit() --> sends message to all the clients.
 //socket.broadcast.emit() --> sends message to all the clients except the sender.
+
+//INTERVIEW QUESTION: difference between HTTP request-response and WebSocket communication” (very common interview question)
 
 server.listen(8000 , () => {
     console.log("server running at http://localhost:8000");

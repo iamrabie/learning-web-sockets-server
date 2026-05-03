@@ -54,11 +54,25 @@
           //emit means send from where i am
           socket.emit('chat message' , input.value);
           input.value = '';
+
+          //added acknowledgement:
+          //DEFINITION: Acknowledgement in Socket.IO is a callback function passed with emit() that runs when the server responds back after receiving the event,
+          //It is a way to get a response from the server after sending an event.
+          socket.emit('acknowledgement' , 'rabia' , (err , res) => {
+            if (err) {
+              console.log("error sending the data to the server.");
+            }
+            else {
+              console.log("response recieved" , res);
+            }
+          });
         } 
         // else {
         //   console.log("nooo");
         // }
       }
+
+      
 
     </script>
   </body>

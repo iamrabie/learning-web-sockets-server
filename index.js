@@ -36,7 +36,13 @@ io.on('connection' , (socket) => {
         callback( null , {
             status:'ok'
         });
-    })
+    });
+
+    //catch-all listeners: it listens to any incoming event, used for debugging.
+    socket.onAny((eventName , ...params) => {
+       console.log("EVENT NAME:::::::::" , eventName);
+       console.log("ARGUMENTS ::::::" , params);
+    });
 });
 
 

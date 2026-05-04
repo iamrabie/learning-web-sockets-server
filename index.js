@@ -28,21 +28,42 @@ io.on('connection' , (socket) => {
         // console.log('MESSAGE' , message);
         // socket.emit('hi');
         // socket.broadcast.emit('chat message' , message);
-        io.emit('chat message' , message);
+        socket.emit('chat message' , message);
     });
 
-    socket.on('acknowledgement' , (data , callback) => {
-        console.log("DATA RECIEVED :::" , data);
-        callback( null , {
-            status:'ok'
-        });
+    // socket.on('acknowledgement' , (data , callback) => {
+    //     // console.log("DATA RECIEVED :::" , data);
+    //     callback( null , {
+    //         status:'ok'
+    //     });
+    // });
+
+    socket.join("room2");
+
+    socket.on("room1" , (room , input) => {
+        console.log("room 1 message::::::" , input);
+        socket.join(room);
+        console.log(`${room} joined, socket id : ${socket.id}`);
+        io.to(room).emit('chat message' , input);
+        io.except('room2').emit("chat message" , "except ROOM 2");
+
     });
+
+    // io.except('room2').emit("chat message" , "except ROOM 2");
+
+
+    // socket.on("room2" , (room , input) => {
+    //     console.log("room 2 message::::::" , input);
+    //     socket.join(room);
+    //     console.log(`${room} 2  joined, socket id : ${socket.id}`);
+    //     io.to(room).emit('chat message' , input);
+    // });
 
     //catch-all listeners: it listens to any incoming event, used for debugging.
-    socket.onAny((eventName , ...params) => {
-       console.log("EVENT NAME:::::::::" , eventName);
-       console.log("ARGUMENTS ::::::" , params);
-    });
+    // socket.onAny((eventName , ...params) => {
+    //    console.log("EVENT NAME:::::::::" , eventName);
+    //    console.log("ARGUMENTS ::::::" , params);
+    // });
 });
 
 
@@ -52,6 +73,8 @@ io.on('connection' , (socket) => {
 //socket.broadcast.emit() --> sends message to all the clients except the sender.
 
 //INTERVIEW QUESTION: difference between HTTP request-response and WebSocket communication” (very common interview question)
+
+// ROOM: room is an arbitrary channel that sockets can join and leave. It can be used to broadcast events to a subset of connected clients
 
 server.listen(8000 , () => {
     console.log("server running at http://localhost:8000");

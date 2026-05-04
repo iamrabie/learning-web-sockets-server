@@ -21,6 +21,8 @@
     <form id="form" action="">
       <input id="input" autocomplete="off" />
       <button onclick="handleClick(event)">Send</button>
+      <button onclick="handleJoinRoom1(event)">Join Room 1</button>
+      <button onclick="handleJoinRoom2(event)">Join Room 2</button>
     </form>
 
     <script src="/socket.io/socket.io.js"></script>
@@ -44,6 +46,35 @@
         window.scrollTo(0, document.body.scrollHeight);
       });
 
+
+      function handleJoinRoom1 (event) {
+        event.preventDefault();
+ 
+        console.log("input value ROOM 1 :::::" , input.value);
+
+        if (input.value) {
+          socket.emit("room1" , "room-1" , input.value);
+          // socket.emit('chat message' , input.value);
+          input.value = '';
+        }
+
+      }
+
+      function handleJoinRoom2 (event) {
+        event.preventDefault();     
+        console.log("input value ROOM 1 :::::" , input.value);
+
+        if (input.value) {
+          socket.emit("room2" , "room-2" , input.value);
+          input.value = '';
+        }
+
+
+      }
+
+
+
+      //HANDLE SEND MESSAGE
       function handleClick (event) {
         event.preventDefault();
         // console.log("e target value :::::::::" , input.value);
@@ -58,18 +89,15 @@
           //added acknowledgement:
           //DEFINITION: Acknowledgement in Socket.IO is a callback function passed with emit() that runs when the server responds back after receiving the event,
           //It is a way to get a response from the server after sending an event.
-          socket.emit('acknowledgement' , 'rabia' , (err , res) => {
-            if (err) {
-              console.log("error sending the data to the server.");
-            }
-            else {
-              console.log("response recieved" , res);
-            }
-          });
+          // socket.emit('acknowledgement' , 'rabia' , (err , res) => {
+          //   if (err) {
+          //     console.log("error sending the data to the server.");
+          //   }
+          //   else {
+          //     console.log("response recieved" , res);
+          //   }
+          // });
         } 
-        // else {
-        //   console.log("nooo");
-        // }
       }
 
       

@@ -42,6 +42,7 @@ io.on('connection' , (socket) => {
 
     socket.on("room1" , (room , input) => {
         console.log("room 1 message::::::" , input);
+        socket.leave("room2");
         socket.join(room);
         console.log(`${room} joined, socket id : ${socket.id}`);
         io.to(room).emit('chat message' , input);

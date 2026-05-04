@@ -41,7 +41,9 @@ io.on('connection' , (socket) => {
     socket.join("room2");
 
     socket.on("room1" , (room , input) => {
-        console.log("room 1 message::::::" , input);
+        // console.log("room 1 message::::::" , input);
+
+        //a user can join multiple rooms at the same time so leave the room before joining another one
         socket.leave("room2");
         socket.join(room);
         console.log(`${room} joined, socket id : ${socket.id}`);

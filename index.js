@@ -52,6 +52,8 @@ io.on('connection' , (socket) => {
 
     });
 
+    //SYNCHRONIZATION
+
     // io.except('room2').emit("chat message" , "except ROOM 2");
 
 

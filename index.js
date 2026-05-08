@@ -17,6 +17,8 @@ app.get('/' , (req , res) => {
 
 
 
+
+
 //It is a predefined event that Socket.io automatically emits, It fires when a client successfully connects to the server. isolated per client connection,Socket.io creates a separate socket object for each user.
 io.on('connection' , (socket) => {
     console.log('a user connected');

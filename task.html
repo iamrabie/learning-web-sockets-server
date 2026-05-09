@@ -4,12 +4,88 @@
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <title>Socket.IO chat</title>
     <style>
-   
+       form {
+        width:15%;
+        border:1px solid black;
+        /* border-radius:6px; */
+        margin-left: auto;
+        margin-right: auto;
+        display:flex;
+        flex-direction: column;
+        row-gap: 5px;
+        padding:15px 9px;
+       }
+
+       input {
+        width:100%;
+        padding:6px 3px;
+        border:0px;
+        border-bottom: 1px solid black;
+        outline:none;
+       }
+
+       button {
+         padding:9px 3px;
+         font-weight: 600;
+         background-color: rgb(27, 27, 137);
+         color:white;
+         border:0px;
+         border-radius: 3px;
+       }
+
+       ul {
+        /* border:1px solid blue; */
+        padding:10px 5px;
+       }
+
+       li {
+        list-style-type: none;
+        padding:7px;
+        border:1px;
+        font-size: 18px;
+        background-color: rgb(18, 115, 163);
+        margin-bottom: 3px;
+        border-radius: 4px;
+        color:white;
+       }
+
     </style>
   </head>
   <body>
-       <p>yo yo yo</p>
-    <script>
-    </script>
+
+       <div class="join-container">
+          <form>
+             <input type="text" placeholder="Enter username" id="input" />
+             <button onclick="handleClick(event)">JOIN</button>
+          </form>
+
+          <ul id="messages"> </ul>
+
+       </div>
+
+       <script src="/socket.io/socket.io.js"></script>
+        <script>
+            const input = document.getElementById("input");
+            const messages = document.getElementById("messages");
+            const socket = io();
+
+            socket.on("notify-all" , (user) => {
+                console.log("..." , user , "JOINED!");
+                const item = document.createElement("li");
+                item.textContent = user;
+                messages.appendChild(item);
+                window.scrollTo(0, document.body.scrollHeight);
+            });
+
+            const handleClick = (event) => {
+                event.preventDefault();
+                console.log("handle click function triggered.");
+
+                if (input.value) {
+                    // console.log("user entered :::" , input.value);
+                    socket.emit("join-room" , input.value);
+                }
+            }
+        </script>
   </body>
 </html>

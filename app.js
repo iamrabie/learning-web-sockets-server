@@ -25,9 +25,9 @@ io.on("connection" , (socket) => {
 
         socket.leave("room-2");
         socket.join("room-1");
-        console.log("current room details ::::::::::::::" , socket.rooms);
-       console.log(username , "joined");
-       io.to("room-1").emit("notify-all" , username);
+        // console.log("current room details ::::::::::::::" , socket.rooms);
+        console.log(username , "joined");
+        io.to("room-1").emit("notify-all" , username);
     });
 });
 

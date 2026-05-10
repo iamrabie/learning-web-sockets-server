@@ -49,11 +49,17 @@
         color:white;
        }
 
+       .main-container {
+        height:100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+       }
     </style>
   </head>
   <body>
-
-       <div class="join-container">
+    <div class="main-container">
+      <div class="join-container">
           <form>
              <input type="text" placeholder="Enter username" id="input" />
              <button onclick="handleClick(event)">JOIN</button>
@@ -62,15 +68,22 @@
           <ul id="messages"> </ul>
 
        </div>
+       <div>
+          <input type="text" placeholder="Enter message" id="text-message" />
+          <button onclick="handleSendMessage(event)">SEND</button>
+       </div>
+    </div>
 
        <script src="/socket.io/socket.io.js"></script>
         <script>
             const input = document.getElementById("input");
             const messages = document.getElementById("messages");
+            const textMessage = document.getElementById("text-message");
+
             const socket = io();
 
             socket.on("notify-all" , (user) => {
-                console.log("..." , user , "JOINED!");
+                // console.log("..." , user , "JOINED!");
                 const item = document.createElement("li");
                 item.textContent = user;
                 messages.appendChild(item);
@@ -84,8 +97,22 @@
                 if (input.value) {
                     // console.log("user entered :::" , input.value);
                     socket.emit("join-room" , input.value);
+                    input.value = '';
                 }
             }
+
+
+            const handleSendMessage = (event) => {
+                event.preventDefault();
+
+                if (textMessage.value) {
+                    // console.log("text value" , textMessage.value);
+                    socket.emit("join-room" , textMessage.value);
+                    textMessage.value = '';
+                }
+            }
+
+
         </script>
   </body>
 </html>

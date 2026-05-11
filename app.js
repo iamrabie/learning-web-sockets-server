@@ -18,16 +18,22 @@ io.on("connection" , (socket) => {
     console.log("user connected");
 
     socket.join("room-2");
-    console.log("current room details ::::::::::::::" , socket.rooms);
+    // console.log("current room details ::::::::::::::" , socket.rooms);
+
 
     //user enter username and joins a room, everyone in the room gets notified.
     socket.on("join-room" , (username) => {
-
         socket.leave("room-2");
         socket.join("room-1");
         // console.log("current room details ::::::::::::::" , socket.rooms);
         console.log(username , "joined");
         io.to("room-1").emit("notify-all" , username);
+    });
+
+    socket.on("send-message" , (message) => {
+    //   socket.leave("room-2");
+    //   socket.join("room-1");
+      io.to("room-1").emit('room-chat' , message);
     });
 });
 

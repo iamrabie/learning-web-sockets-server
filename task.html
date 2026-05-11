@@ -64,12 +64,14 @@
              <input type="text" placeholder="Enter username" id="input" />
              <button onclick="handleClick(event)">JOIN</button>
           </form>
-
+  
           <ul id="messages"> </ul>
+          <div id="user-joined"></div>
 
        </div>
        <div>
-          <input type="text" placeholder="Enter message" id="text-message" />
+          <div id="typing"></div>
+          <input type="text" placeholder="Enter message" id="text-message" oninput="handleInputValue(event)" />
           <button onclick="handleSendMessage(event)">SEND</button>
        </div>
     </div>
@@ -79,20 +81,47 @@
             const input = document.getElementById("input");
             const messages = document.getElementById("messages");
             const textMessage = document.getElementById("text-message");
+            const typing = document.getElementById("typing"); 
+            const userJoined = document.getElementById("user-joined");
+
+            let isTyping = false;
 
             const socket = io();
 
             socket.on("notify-all" , (user) => {
-                // console.log("..." , user , "JOINED!");
+                console.log("..." , user , "JOINED!");
+                const item = document.createElement("p");
+                item.textContent = user + " " + "joined!";
+                userJoined.appendChild(item);
+                // window.scrollTo(0, document.body.scrollHeight);
+            });
+
+
+            socket.on("room-chat" , (message) => {
                 const item = document.createElement("li");
-                item.textContent = user;
+                item.textContent = message + " " + "rabia";
                 messages.appendChild(item);
                 window.scrollTo(0, document.body.scrollHeight);
-            });
+            })
+     
+
+            const handleInputValue = (event) => {
+                console.log("user input change function triggered" , event.target.value);
+                if (textMessage.value && !isTyping) {
+                    socket.emit("typing-indicator" , "... typing");
+                    isTyping =  true;
+                }
+
+                if (!textMessage.value) {
+                   socket.emit("stop-typing" , "");
+                    isTyping =  false;
+                }
+            }
+
 
             const handleClick = (event) => {
                 event.preventDefault();
-                console.log("handle click function triggered.");
+                // console.log("handle click function triggered.");
 
                 if (input.value) {
                     // console.log("user entered :::" , input.value);
@@ -107,7 +136,7 @@
 
                 if (textMessage.value) {
                     // console.log("text value" , textMessage.value);
-                    socket.emit("join-room" , textMessage.value);
+                    socket.emit("send-message" , textMessage.value ,);
                     textMessage.value = '';
                 }
             }

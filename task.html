@@ -62,14 +62,14 @@
       <div class="join-container">
           <form>
              <input type="text" placeholder="Enter username" id="input" />
-             <button onclick="handleClick(event)">JOIN</button>
+             <button onclick="handleClick(event)">JOIN ROOM 1</button>
           </form>
-  
-          <ul id="messages"> </ul>
+          <ul id="global"></ul>
+          <ul id="messages"></ul>
           <div id="user-joined"></div>
-
        </div>
        <div>
+          <div id="acknowledgement"></div>
           <div id="typing"></div>
           <input type="text" placeholder="Enter message" id="text-message" oninput="handleInputValue(event)" />
           <button onclick="handleSendMessage(event)">SEND</button>
@@ -83,11 +83,18 @@
             const textMessage = document.getElementById("text-message");
             const typing = document.getElementById("typing"); 
             const userJoined = document.getElementById("user-joined");
-
-            let isTyping = false;
+            const acknowledgement = document.getElementById("acknowledgement");
+            const globalAnnouncement = document.getElementById("global");
 
             const socket = io();
 
+            socket.on("global-announcement" , (announcement) => {
+                const item = document.createElement("li");
+                item.textContent = announcement;
+                globalAnnouncement.appendChild(item);
+            }); 
+
+        
             socket.on("notify-all" , (user) => {
                 console.log("..." , user , "JOINED!");
                 const item = document.createElement("p");
@@ -98,24 +105,16 @@
 
 
             socket.on("room-chat" , (message) => {
+                console.log("room chat :::::::::" , message);
                 const item = document.createElement("li");
-                item.textContent = message + " " + "rabia";
+                item.textContent = message;
                 messages.appendChild(item);
                 window.scrollTo(0, document.body.scrollHeight);
-            })
-     
+            });
 
             const handleInputValue = (event) => {
                 console.log("user input change function triggered" , event.target.value);
-                if (textMessage.value && !isTyping) {
-                    socket.emit("typing-indicator" , "... typing");
-                    isTyping =  true;
-                }
-
-                if (!textMessage.value) {
-                   socket.emit("stop-typing" , "");
-                    isTyping =  false;
-                }
+                 
             }
 
 
@@ -136,7 +135,13 @@
 
                 if (textMessage.value) {
                     // console.log("text value" , textMessage.value);
-                    socket.emit("send-message" , textMessage.value ,);
+                    socket.emit("send-message" , textMessage.value , (res) => {
+                    console.log("RESPONSE " , res);
+                    const item = document.createElement("p");
+                    item.textContent = res;
+                    acknowledgement.appendChild(item);
+                });
+
                     textMessage.value = '';
                 }
             }

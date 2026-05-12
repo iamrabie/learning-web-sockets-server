@@ -18,6 +18,7 @@ io.on("connection" , (socket) => {
     console.log("user connected");
 
     socket.join("room-2");
+    // io.emit("global-announcement" , "A new user joined the platform.");
     // console.log("current room details ::::::::::::::" , socket.rooms);
 
 
@@ -28,13 +29,22 @@ io.on("connection" , (socket) => {
         // console.log("current room details ::::::::::::::" , socket.rooms);
         console.log(username , "joined");
         io.to("room-1").emit("notify-all" , username);
+        io.emit("global-announcement" , "A new user joined the platform");
+        // console.log("is triggering?????????");    
     });
 
-    socket.on("send-message" , (message) => {
-    //   socket.leave("room-2");
-    //   socket.join("room-1");
+
+
+    socket.on("send-message" , (message , callback) => {
+    //   console.log("MESSAGE RECIEVED :::::::" , message);
+      socket.leave("room-2");
+      socket.join("room-1");
       io.to("room-1").emit('room-chat' , message);
+      callback("your message has been recieved");
     });
+
+
+
 });
 
 server.listen(8000, () => {

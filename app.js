@@ -44,6 +44,17 @@ io.on("connection" , (socket) => {
     });
 
 
+    socket.on("typing" , (value) => {
+      // console.log("TYPING LISTENER");
+      socket.leave("room-2");
+      socket.join("room-1");
+      io.to("room-1").emit('typing' , value);
+    });
+
+
+    socket.on("stop-typing", () => {
+     io.to("room-1").emit("stop-typing");
+    });
 
 });
 

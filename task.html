@@ -85,6 +85,7 @@
             const userJoined = document.getElementById("user-joined");
             const acknowledgement = document.getElementById("acknowledgement");
             const globalAnnouncement = document.getElementById("global");
+            let typingTimer;
 
             const socket = io();
 
@@ -112,9 +113,34 @@
                 window.scrollTo(0, document.body.scrollHeight);
             });
 
+
+            socket.on("typing" , (isTyping) => {
+                // console.log("client side typing listener");
+                typing.textContent = isTyping;
+            });
+
+
+            socket.on("stop-typing", (stopTyping) => {
+                typing.textContent = " ";
+            });
+
             const handleInputValue = (event) => {
-                console.log("user input change function triggered" , event.target.value);
-                 
+                console.log("user input" , event.target.value);
+                clearTimeout(typingTimer);
+
+                if (event.target.value) {
+                    // console.log("TYPING TRIGGERED FROM CLIENT SIDE");
+                    console.log("IF BLOCK::::::::::::::::::");
+                    socket.emit("typing", "is typing");
+                    typingTimer = setTimeout(() => {
+                        socket.emit("stop-typing");
+                    } , 500);
+                }
+
+                else {
+                    // console.log("ELSE BLOCK ::::::::::::::");
+                    socket.emit("stop-typing");
+                }
             }
 
 
